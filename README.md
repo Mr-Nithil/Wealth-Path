@@ -44,7 +44,9 @@ Clean Architecture with three strict layers per feature:
   repository implementations.
 - **Presentation** — BLoC/Cubit, pages, widgets. Reads domain entities only.
 
-Dependency rule: Presentation → Domain ← Data. Domain never imports from Data or Presentation.
+Dependency rule: Presentation → Domain ← Data.
+
+Domain never imports from Data or Presentation.
 
 ## Assumptions
 
@@ -68,7 +70,7 @@ Dependency rule: Presentation → Domain ← Data. Domain never imports from Dat
 - **Rollback Strategy:** If the API request fails, the temporary record is removed and the previous total is restored to keep the UI consistent with server state.
 - **Trade-off:** Optimistic updates require additional reconciliation logic between temporary and server-generated records, increasing state management complexity slightly.
 
-#### Simple Exception-Based Error Handling (like fpdart)
+#### Simple Exception-Based Error Handling
 
 - **Why:** The feature uses straightforward try-catch handling with custom ServerException objects instead of functional abstractions like Either<Result>. For this assessment-sized feature, this approach keeps the flow easy to follow and avoids unnecessary architectural complexity.
 - **Trade-off:** Functional error handling patterns may scale better in larger systems with more complex failure scenarios or shared error pipelines.
@@ -81,7 +83,7 @@ Dependency rule: Presentation → Domain ← Data. Domain never imports from Dat
 #### Dedicated Dio Client with Centralized Configuration
 
 - **Why:** A dedicated DioClient wrapper centralizes API configuration such as base URL, timeouts, headers, and interceptors. This avoids duplicated networking setup across features.
-- **Benefits:** Logging, authentication, retry logic, or global error interceptors can later be added in one place without changing feature code.
+- **Benefits:** Logging(included), authentication, retry logic, or global error interceptors can later be added in one place without changing feature code.
 
 #### Dependency Injection with GetIt
 
@@ -103,11 +105,12 @@ Dependency rule: Presentation → Domain ← Data. Domain never imports from Dat
 #### Unit Testing Critical Layers
 
 - **Why:** Unit tests were added for entities, repository logic, and Cubit behaviour to validate business logic independently from the UI.
-- **Benefits:** The UI can continue displaying existing data instead of collapsing into a full error screen, improving user experience and resilience.
 
 ### Budget Feature
 
-## Future Improvements
+Budget Feature implementation decisions and trade-offs will be documented here once completed.
+
+<!-- ## Future Improvements -->
 
 ## Setup
 
