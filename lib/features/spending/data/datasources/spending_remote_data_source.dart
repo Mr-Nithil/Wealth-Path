@@ -20,6 +20,25 @@ class SpendingRemoteDataSourceImpl implements SpendingRemoteDataSource {
 
   const SpendingRemoteDataSourceImpl({required this.dioClient});
 
+  String extractSpendingErrorMessage(DioException e, String fallback) {
+    final data = e.response?.data;
+
+    if (data is Map<String, dynamic>) {
+      final message = data['message'];
+      if (message is String && message.isNotEmpty) return message;
+
+      final error = data['error'];
+      if (error is String && error.isNotEmpty) return error;
+
+      final details = data['details'];
+      if (details is List && details.isNotEmpty) {
+        return details.whereType<String>().join(', ');
+      }
+    }
+
+    return e.message ?? fallback;
+  }
+
   @override
   Future<({List<SpendingModel> items, double total, bool hasMore})>
   getSpending({required int page, int limit = 20}) async {
@@ -39,12 +58,14 @@ class SpendingRemoteDataSourceImpl implements SpendingRemoteDataSource {
       return (items: items, total: total, hasMore: hasMore);
     } on DioException catch (e) {
       throw ServerException(
-        message:
-            e.response?.data?['message'] as String? ??
-            e.message ??
-            'Failed to fetch spending',
+        message: extractSpendingErrorMessage(
+          e,
+          'Failed to fetch spending records. Please try again.',
+        ),
         statusCode: e.response?.statusCode,
       );
+    } catch (e) {
+      throw ServerException(message: "An unexpected error occurred: $e");
     }
   }
 
@@ -68,12 +89,14 @@ class SpendingRemoteDataSourceImpl implements SpendingRemoteDataSource {
       return SpendingModel.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw ServerException(
-        message:
-            e.response?.data?['message'] as String? ??
-            e.message ??
-            'Failed to add spending',
+        message: extractSpendingErrorMessage(
+          e,
+          'Failed to add spending record. Please try again.',
+        ),
         statusCode: e.response?.statusCode,
       );
+    } catch (e) {
+      throw ServerException(message: "An unexpected error occurred: $e");
     }
   }
 }

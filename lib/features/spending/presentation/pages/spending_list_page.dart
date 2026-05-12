@@ -69,6 +69,8 @@ class _SpendingListPageState extends State<SpendingListPage> {
         ],
       ),
       body: BlocConsumer<SpendingCubit, SpendingState>(
+        listenWhen: (previous, current) =>
+            current is SpendingError && previous != current,
         listener: (context, state) {
           if (state is SpendingError) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -76,11 +78,6 @@ class _SpendingListPageState extends State<SpendingListPage> {
                 content: Text(state.message),
                 backgroundColor: const Color(0xFFDA3633),
                 behavior: SnackBarBehavior.floating,
-                action: SnackBarAction(
-                  label: 'Retry',
-                  textColor: Colors.white,
-                  onPressed: () => context.read<SpendingCubit>().loadSpending(),
-                ),
               ),
             );
           }
@@ -197,6 +194,9 @@ class _ErrorView extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             ElevatedButton.icon(
+              style: ButtonStyle(
+                minimumSize: WidgetStatePropertyAll(Size(100, 20)),
+              ),
               onPressed: onRetry,
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),
