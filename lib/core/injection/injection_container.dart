@@ -5,8 +5,9 @@ import 'package:wealthpath/features/spending/data/repositories/spending_reposito
 import 'package:wealthpath/features/spending/domain/repositories/spending_repository.dart';
 import 'package:wealthpath/features/spending/domain/usecases/add_spending.dart';
 import 'package:wealthpath/features/spending/domain/usecases/get_spending.dart';
+import 'package:wealthpath/features/spending/presentation/cubit/spending_cubit.dart';
 
-final GetIt sl = GetIt.instance;
+final sl = GetIt.instance;
 
 Future<void> initDependencies() async {
   _initCore();
@@ -29,4 +30,6 @@ void _initSpending() {
   sl.registerLazySingleton(() => GetSpending(repository: sl()));
 
   sl.registerLazySingleton(() => AddSpending(repository: sl()));
+
+  sl.registerFactory(() => SpendingCubit(getSpending: sl(), addSpending: sl()));
 }
