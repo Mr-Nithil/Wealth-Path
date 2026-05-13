@@ -58,12 +58,15 @@ class _SpendingListPageState extends State<SpendingListPage> {
         ),
         title: const Text('My Spending'),
         actions: [
-          TextButton.icon(
-            onPressed: _showAddModal,
-            icon: const Icon(Icons.add, color: Color(0xFF238636)),
-            label: const Text(
-              'Add',
-              style: TextStyle(color: Color(0xFF238636)),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: TextButton.icon(
+              onPressed: _showAddModal,
+              icon: const Icon(Icons.add_circle, color: Color(0xFF238636)),
+              label: const Text(
+                'Add',
+                style: TextStyle(color: Color(0xFF238636)),
+              ),
             ),
           ),
         ],
@@ -84,9 +87,7 @@ class _SpendingListPageState extends State<SpendingListPage> {
         },
         builder: (context, state) {
           if (state is SpendingLoading) {
-            return const Center(
-              child: CircularProgressIndicator(color: Color(0xFF238636)),
-            );
+            return const Center(child: Text("Loading spending..."));
           }
 
           if (state is SpendingError && state.previousItems == null) {
@@ -138,10 +139,7 @@ class _SpendingListPageState extends State<SpendingListPage> {
                           padding: const EdgeInsets.all(24),
                           child: isLoadingMore
                               ? const Center(
-                                  child: CircularProgressIndicator(
-                                    color: Color(0xFF238636),
-                                    strokeWidth: 2,
-                                  ),
+                                  child: Text("Loading more spending..."),
                                 )
                               : hasMore
                               ? TextButton(

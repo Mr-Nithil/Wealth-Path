@@ -73,9 +73,8 @@ class _BudgetOverviewViewState extends State<_BudgetOverviewView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF0D1117),
       appBar: AppBar(
-        backgroundColor: const Color(0xFF161B22),
+        backgroundColor: Color(0xFF0D1117),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () => context.go('/'),
@@ -136,7 +135,7 @@ class _BudgetOverviewViewState extends State<_BudgetOverviewView> {
         child: BlocBuilder<BudgetBloc, BudgetState>(
           builder: (context, state) {
             if (state is BudgetLoading) {
-              return const Center(child: CircularProgressIndicator());
+              return const Center(child: Text("Loading budgets..."));
             }
 
             if (state is BudgetLoaded) {
@@ -250,7 +249,7 @@ class _LoadedBody extends StatelessWidget {
               const SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.all(16),
-                  child: Center(child: CircularProgressIndicator()),
+                  child: Center(child: Text("Loading more budgets...")),
                 ),
               ),
           ],

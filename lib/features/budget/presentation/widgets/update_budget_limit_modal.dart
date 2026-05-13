@@ -66,7 +66,7 @@ class _UpdateBudgetLimitModalState extends State<UpdateBudgetLimitModal> {
                 ),
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 15),
             Row(
               children: [
                 Text(
@@ -98,6 +98,13 @@ class _UpdateBudgetLimitModalState extends State<UpdateBudgetLimitModal> {
                 fillColor: const Color(0xFF0D1117),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF1F6FEB),
+                    width: 1.5,
+                  ),
                 ),
               ),
               validator: (value) {

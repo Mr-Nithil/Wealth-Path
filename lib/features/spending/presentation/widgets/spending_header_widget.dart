@@ -26,6 +26,7 @@ class SpendingHeaderWidget extends StatelessWidget {
       child: Row(
         children: [
           Expanded(
+            flex: 2,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -47,6 +48,7 @@ class SpendingHeaderWidget extends StatelessWidget {
           ),
           Container(width: 1, height: 48, color: Colors.white24),
           Expanded(
+            flex: 1,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [

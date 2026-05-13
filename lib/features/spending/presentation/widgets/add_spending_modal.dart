@@ -75,7 +75,7 @@ class _AddSpendingModalState extends State<AddSpendingModal> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               Row(
                 children: [
                   const Text(
@@ -174,7 +174,7 @@ class _AddSpendingModalState extends State<AddSpendingModal> {
                         ),
                 ),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 20),
             ],
           ),
         ),

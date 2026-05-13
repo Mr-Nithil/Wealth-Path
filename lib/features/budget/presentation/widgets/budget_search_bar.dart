@@ -40,6 +40,10 @@ class BudgetSearchBar extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(color: Color(0xFF30363D)),
           ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: const BorderSide(color: Color(0xFF1F6FEB), width: 1.5),
+          ),
         ),
       ),
     );
