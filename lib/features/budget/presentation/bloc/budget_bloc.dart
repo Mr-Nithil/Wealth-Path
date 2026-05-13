@@ -63,7 +63,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
       );
     } catch (e) {
       if (cached.isEmpty) {
-        emit(BudgetError(e.toString()));
+        emit(BudgetError("Failed to load budgets! Check your connection."));
       }
     }
   }
@@ -88,12 +88,21 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
           budgets: merged,
           hasMore: result.hasMore,
           currentPage: _currentPage,
+          isOffline: false,
         ),
       );
     } catch (e) {
       _currentPage--;
-      emit(BudgetError(e.toString()));
-      emit(current);
+      emit(BudgetError("Failed to load more! Check your connection."));
+      final cached = await _getCachedBudgets();
+      emit(
+        current.copyWith(
+          budgets: cached,
+          hasMore: false,
+          currentPage: _currentPage,
+          isOffline: true,
+        ),
+      );
     }
   }
 
@@ -102,6 +111,8 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
     RefreshBudgets event,
     Emitter<BudgetState> emit,
   ) async {
+    final current = state;
+    if (current is! BudgetLoaded) return;
     try {
       _currentPage = 1;
       final result = await _getBudgets(page: _currentPage, limit: _pageSize);
@@ -114,7 +125,17 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
           currentPage: _currentPage,
         ),
       );
-    } catch (_) {}
+    } catch (e) {
+      emit(BudgetError('Failed to refresh the list! Check your connection.'));
+      final cached = await _getCachedBudgets();
+      emit(
+        current.copyWith(
+          budgets: cached,
+          currentPage: _currentPage,
+          isOffline: true,
+        ),
+      );
+    }
   }
 
   // Search
@@ -145,12 +166,12 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
       // Network call to update limit on server and cache
       await _updateBudgetLimit(event.id, event.newLimit);
       await _cacheBudgets(optimistic);
+      emit(current.copyWith(isOffline: false));
     } catch (e) {
       // Rollback both cache and UI state
       await _cacheBudgets(previousBudgets);
-      emit(current.copyWith(budgets: previousBudgets));
-      emit(BudgetError('Could not update limit: ${e.toString()}'));
-      emit(current.copyWith(budgets: previousBudgets));
+      emit(BudgetError('Failed to update limit! Check your connection.'));
+      emit(current.copyWith(budgets: previousBudgets, isOffline: true));
     }
   }
 }

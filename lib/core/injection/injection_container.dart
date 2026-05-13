@@ -34,7 +34,7 @@ Future<void> _initHive() async {
   Hive.registerAdapter(BudgetModelAdapter());
 
   final budgetBox = await Hive.openBox<BudgetModel>(HiveConstants.budgetBox);
-  sl.registerSingleton<Box>(budgetBox);
+  sl.registerSingleton<Box<BudgetModel>>(budgetBox);
 }
 
 void _initCore() {
