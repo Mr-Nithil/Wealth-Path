@@ -11,6 +11,7 @@ import 'package:wealthpath/features/budget/domain/usecases/cache_budgets.dart';
 import 'package:wealthpath/features/budget/domain/usecases/get_budgets.dart';
 import 'package:wealthpath/features/budget/domain/usecases/get_cached_bugets.dart';
 import 'package:wealthpath/features/budget/domain/usecases/update_budget_limit.dart';
+import 'package:wealthpath/features/budget/presentation/bloc/budget_bloc.dart';
 import 'package:wealthpath/features/spending/data/datasources/spending_remote_data_source.dart';
 import 'package:wealthpath/features/spending/data/repositories/spending_repository_impl.dart';
 import 'package:wealthpath/features/spending/domain/repositories/spending_repository.dart';
@@ -73,4 +74,13 @@ void _initBudget() {
   sl.registerLazySingleton(() => UpdateBudgetLimit(repository: sl()));
   sl.registerLazySingleton(() => GetCachedBudgets(repository: sl()));
   sl.registerLazySingleton(() => CacheBudgets(repository: sl()));
+
+  sl.registerFactory(
+    () => BudgetBloc(
+      getBudgets: sl(),
+      updateBudgetLimit: sl(),
+      getCachedBudgets: sl(),
+      cacheBudgets: sl(),
+    ),
+  );
 }
