@@ -63,7 +63,11 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
       );
     } catch (e) {
       if (cached.isEmpty) {
-        emit(BudgetError("Failed to load budgets! Check your connection."));
+        emit(
+          BudgetError(
+            "Failed to load budget list! Check your connection and try again.",
+          ),
+        );
       }
     }
   }
@@ -94,7 +98,11 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
     } catch (e) {
       _currentPage--;
       final cached = await _getCachedBudgets();
-      emit(BudgetError("Failed to load more! Check your connection."));
+      emit(
+        BudgetError(
+          "Failed to load more! Check your connection and try again.",
+        ),
+      );
       emit(
         current.copyWith(
           budgets: cached,
@@ -127,7 +135,11 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
       );
     } catch (e) {
       final cached = await _getCachedBudgets();
-      emit(BudgetError('Failed to refresh the list! Check your connection.'));
+      emit(
+        BudgetError(
+          'Failed to refresh budgets. Showing your last saved data. Check your connection and try again.',
+        ),
+      );
       emit(
         current.copyWith(
           budgets: cached,
@@ -170,7 +182,11 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
     } catch (e) {
       // Rollback both cache and UI state
       await _cacheBudgets(previousBudgets);
-      emit(BudgetError('Failed to update limit! Check your connection.'));
+      emit(
+        BudgetError(
+          'Failed to update limit! Check your connection and try again.',
+        ),
+      );
       emit(current.copyWith(budgets: previousBudgets, isOffline: true));
     }
   }

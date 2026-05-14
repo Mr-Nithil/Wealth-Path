@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wealthpath/core/injection/injection_container.dart';
 import 'package:wealthpath/features/spending/presentation/cubit/spending_cubit.dart';
 import 'package:wealthpath/features/spending/presentation/widgets/add_spending_modal.dart';
 import 'package:wealthpath/features/spending/presentation/widgets/spending_header_widget.dart';
@@ -11,6 +12,18 @@ class SpendingListPage extends StatefulWidget {
 
   @override
   State<SpendingListPage> createState() => _SpendingListPageState();
+}
+
+class SpendingPage extends StatelessWidget {
+  const SpendingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => sl<SpendingCubit>()..loadSpending(),
+      child: const SpendingListPage(),
+    );
+  }
 }
 
 class _SpendingListPageState extends State<SpendingListPage> {

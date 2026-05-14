@@ -34,9 +34,12 @@ class SpendingCubit extends Cubit<SpendingState> {
         ),
       );
     } on ServerException catch (e) {
-      emit(SpendingError(message: e.message));
-    } catch (e) {
-      emit(SpendingError(message: 'Unexpected error: ${e.toString()}'));
+      emit(
+        SpendingError(
+          message:
+              "Failed to load your spending right now. Please try again later.",
+        ),
+      );
     }
   }
 
@@ -64,7 +67,7 @@ class SpendingCubit extends Cubit<SpendingState> {
       emit(current.copyWith(isLoadingMore: false));
       emit(
         SpendingError(
-          message: e.message,
+          message: "Failed to load more spending. Pull to retry.",
           previousItems: current.items,
           previousTotal: current.total,
         ),
@@ -117,7 +120,7 @@ class SpendingCubit extends Cubit<SpendingState> {
 
       emit(
         SpendingError(
-          message: 'Failed to add: ${e.message}',
+          message: 'Failed to save this spending entry. Please try again.',
           previousItems: rolledBack,
           previousTotal: current.total,
         ),
