@@ -14,7 +14,6 @@ class _AddSpendingModalState extends State<AddSpendingModal> {
   final _amountController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   String _selectedCategory = 'Groceries';
-  bool _isSubmitting = false;
 
   static const _categories = [
     'Groceries',
@@ -36,7 +35,6 @@ class _AddSpendingModalState extends State<AddSpendingModal> {
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-    setState(() => _isSubmitting = true);
 
     context.read<SpendingCubit>().addSpendingRecord(
       merchant: _merchantController.text.trim(),
@@ -155,7 +153,7 @@ class _AddSpendingModalState extends State<AddSpendingModal> {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: _isSubmitting ? null : _submit,
+                  onPressed: _submit,
                   child: const Text(
                     'Add Record',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),

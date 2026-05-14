@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
-import 'package:wealthpath/core/errors/exceptions.dart';
 import 'package:wealthpath/features/spending/data/models/spending_model.dart';
 import 'package:wealthpath/features/spending/domain/entities/spending.dart';
 import 'package:wealthpath/features/spending/domain/usecases/add_spending.dart';
@@ -33,7 +32,7 @@ class SpendingCubit extends Cubit<SpendingState> {
           hasMore: result.hasMore,
         ),
       );
-    } on ServerException catch (e) {
+    } catch (e) {
       emit(
         SpendingError(
           message:
@@ -62,7 +61,7 @@ class SpendingCubit extends Cubit<SpendingState> {
           hasMore: result.hasMore,
         ),
       );
-    } on ServerException catch (e) {
+    } catch (e) {
       _currentPage--;
       emit(current.copyWith(isLoadingMore: false));
       emit(
@@ -112,7 +111,7 @@ class SpendingCubit extends Cubit<SpendingState> {
           .toList();
 
       emit((state as SpendingLoaded).copyWith(items: updatedItems));
-    } on ServerException catch (e) {
+    } catch (e) {
       // Rollback: remove the optimistic item, restore total
       final rolledBack = current.items
           .where((item) => item.id != tempId)
@@ -125,19 +124,6 @@ class SpendingCubit extends Cubit<SpendingState> {
           previousTotal: current.total,
         ),
       );
-
-      // Restore the loaded state after showing the error
-      Future.delayed(const Duration(seconds: 3), () {
-        if (!isClosed) {
-          emit(
-            SpendingLoaded(
-              items: current.items,
-              total: current.total,
-              hasMore: current.hasMore,
-            ),
-          );
-        }
-      });
     }
   }
 }
