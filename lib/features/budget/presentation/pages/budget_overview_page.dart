@@ -135,7 +135,9 @@ class _BudgetOverviewViewState extends State<_BudgetOverviewView> {
         child: BlocBuilder<BudgetBloc, BudgetState>(
           builder: (context, state) {
             if (state is BudgetLoading) {
-              return const Center(child: Text("Loading budgets..."));
+              return const Center(
+                child: CircularProgressIndicator(color: Color(0xFF1F6FEB)),
+              );
             }
 
             if (state is BudgetLoaded) {
@@ -249,7 +251,9 @@ class _LoadedBody extends StatelessWidget {
               const SliverToBoxAdapter(
                 child: Padding(
                   padding: EdgeInsets.all(16),
-                  child: Center(child: Text("Loading more budgets...")),
+                  child: Center(
+                    child: CircularProgressIndicator(color: Color(0xFF1F6FEB)),
+                  ),
                 ),
               ),
           ],

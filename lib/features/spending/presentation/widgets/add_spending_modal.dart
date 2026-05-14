@@ -38,7 +38,7 @@ class _AddSpendingModalState extends State<AddSpendingModal> {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isSubmitting = true);
 
-    await context.read<SpendingCubit>().addSpendingRecord(
+    context.read<SpendingCubit>().addSpendingRecord(
       merchant: _merchantController.text.trim(),
       amount: double.parse(_amountController.text.trim()),
       category: _selectedCategory,
@@ -156,22 +156,10 @@ class _AddSpendingModalState extends State<AddSpendingModal> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: _isSubmitting ? null : _submit,
-                  child: _isSubmitting
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text(
-                          'Add Record',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                  child: const Text(
+                    'Add Record',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),

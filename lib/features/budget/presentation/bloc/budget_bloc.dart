@@ -93,8 +93,8 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
       );
     } catch (e) {
       _currentPage--;
-      emit(BudgetError("Failed to load more! Check your connection."));
       final cached = await _getCachedBudgets();
+      emit(BudgetError("Failed to load more! Check your connection."));
       emit(
         current.copyWith(
           budgets: cached,
@@ -126,8 +126,8 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
         ),
       );
     } catch (e) {
-      emit(BudgetError('Failed to refresh the list! Check your connection.'));
       final cached = await _getCachedBudgets();
+      emit(BudgetError('Failed to refresh the list! Check your connection.'));
       emit(
         current.copyWith(
           budgets: cached,

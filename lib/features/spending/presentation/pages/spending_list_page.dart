@@ -87,7 +87,7 @@ class _SpendingListPageState extends State<SpendingListPage> {
         },
         builder: (context, state) {
           if (state is SpendingLoading) {
-            return const Center(child: Text("Loading spending..."));
+            return const Center(child: CircularProgressIndicator());
           }
 
           if (state is SpendingError && state.previousItems == null) {
@@ -138,9 +138,7 @@ class _SpendingListPageState extends State<SpendingListPage> {
                         child: Padding(
                           padding: const EdgeInsets.all(24),
                           child: isLoadingMore
-                              ? const Center(
-                                  child: Text("Loading more spending..."),
-                                )
+                              ? const Center(child: CircularProgressIndicator())
                               : hasMore
                               ? TextButton(
                                   onPressed: () =>
@@ -150,11 +148,7 @@ class _SpendingListPageState extends State<SpendingListPage> {
                                     style: TextStyle(color: Color(0xFF238636)),
                                   ),
                                 )
-                              : const Text(
-                                  'All records loaded',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Color(0xFF8B949E)),
-                                ),
+                              : SizedBox.shrink(),
                         ),
                       ),
                     ],
