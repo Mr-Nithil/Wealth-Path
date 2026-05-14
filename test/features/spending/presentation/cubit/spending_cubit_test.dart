@@ -199,7 +199,7 @@ void main() {
           isA<SpendingError>().having(
             (e) => e.message,
             'message',
-            'Network error',
+            'Failed to load your spending right now. Please try again later.',
           ),
         ]);
 
@@ -334,7 +334,7 @@ void main() {
       final errorState = states.whereType<SpendingError>().firstOrNull;
 
       expect(errorState, isNotNull);
-      expect(errorState?.message, contains('Load more failed'));
+      expect(errorState?.message, contains('Failed to load more spending'));
       expect(errorState?.previousItems, tInitialList);
 
       await subscription.cancel();
@@ -440,7 +440,10 @@ void main() {
       final errorState = states.whereType<SpendingError>().firstOrNull;
 
       expect(errorState, isNotNull);
-      expect(errorState?.message, contains('Failed to add'));
+      expect(
+        errorState?.message,
+        contains('Failed to save this spending entry'),
+      );
       expect(errorState?.previousItems?.length, 1);
 
       await subscription.cancel();
