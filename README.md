@@ -28,29 +28,43 @@ Dependency rule: `Presentation → Domain ← Data`. Domain never imports from D
 
 The spending feature has a linear flow (load, paginate, add). Cubit keeps this readable with minimal boilerplate. If the feature grows to include filtering, sorting, or concurrent event streams, migrating to Bloc would give better event traceability.
 
+**Trade-off:** Cubit has no built-in sequencing, so pagination uses a manual `isLoadingMore` guard to keep calls sequential.
+
 ### Budget — Bloc over Cubit
 
 The budget feature has multiple concurrent event types — load, refresh, paginate, search, and update limit — that can fire in any order. Bloc with `bloc_concurrency` transformers (`restartable`, `droppable`, `sequential`) gives precise control over how overlapping events are handled, which is important for correctness during rapid interactions like scroll-triggered pagination and search.
+
+**Trade-off:** Bloc provides concurrency control but adds boilerplate, so each interaction needs its own event/state wiring.
 
 ### Optimistic UI Updates
 
 Both features apply optimistic updates before API responses. In Spending, new records use a `temp_` UUID prefix to safely coexist in the list until the server record replaces them. In Budget, limit changes are emitted immediately to the UI. Both roll back state and cache on failure.
 
+**Trade-off:** Optimistic UI feels fast but requires temp IDs plus reconciliation/rollback paths on failure.
+
 ### Cache-First Loading (Budget)
 
 On launch, cached budgets are emitted immediately (`isOffline: true`) so the UI renders without a spinner. A background fetch then updates to fresh data. If the fetch fails and cache is empty, a `BudgetError` is emitted; otherwise the offline state is preserved.
+
+**Trade-off:** Cache-first renders instantly but must handle stale data and background refresh/empty-cache failure paths.
 
 ### State Preservation on Errors
 
 `SpendingError` carries `previousItems` and `previousTotal` so the UI continues showing existing data instead of collapsing to a full error screen during pagination or add failures.
 
+**Trade-off:** Preserving previous data keeps the UI stable but complicates error state shape and UI handling.
+
 ### Error Handling
 
-Straightforward `try/catch` with custom `ServerException` and `CacheException` types, rather than `Either<Failure, T>`. This keeps the flow readable at assessment scope. A larger codebase with shared error pipelines would benefit from the functional approach.
+Straightforward `try/catch` with custom `ServerException` and `CacheException` types, rather than `Either<Failure, T>`. This keeps the flow readable at this scope. A larger codebase with shared error pipelines would benefit from the functional approach.
+
+**Trade-off:** Simple try/catch is readable but lacks type guarantees, so failures rely on consistent manual handling.
 
 ### Dependency Injection
 
 `GetIt` with manual registration (no code gen). Repositories and use cases are `LazySingleton` (stateless, shared). Cubit and Bloc are `Factory` (fresh instance per screen).
+
+**Trade-off:** Manual GetIt is explicit but doesn’t scale, so new features need careful hand-registered wiring.
 
 ## Testing
 
