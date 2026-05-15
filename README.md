@@ -90,3 +90,31 @@ flutter test
 - Extract pagination metadata into a dedicated `PaginationState` value object to keep BLoC states leaner as features grow.
 - Replace `LogInterceptor` with a levelled structured logger to prevent sensitive data leaking in production.
 - Add integration/widget tests for key user flows.
+
+## Screenshots
+
+Screenshots for the online and offline flows are included below. Images are located under the `assets/screenshots/` directory.
+
+### Budget
+
+- **Online Flow:**
+
+  ![Budget Online Flow](assets/screenshots/budget/Online%20Flow.png)
+
+- **Cached / Offline Flow:**
+
+  ![Budget Cached Flow](assets/screenshots/budget/Cached%20Flow.png)
+
+- **Edit Limit (optimistic update):**
+
+  ![Budget Edit Limit](assets/screenshots/budget/Edit%20Limit.png)
+
+### Spending
+
+- **Online Flow (optimistic update):**
+
+  ![Spending Online Flow](assets/screenshots/spending/Online%20Flow.png)
+
+- **Offline Flow:**
+
+  ![Spending Offline Flow](assets/screenshots/spending/Offline%20Flow.png)
