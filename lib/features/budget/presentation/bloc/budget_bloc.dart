@@ -172,13 +172,14 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
       return b.id == event.id ? b.copyWith(limit: event.newLimit) : b;
     }).toList();
 
-    emit(current.copyWith(budgets: optimistic));
+    final optimisticState = current.copyWith(budgets: optimistic);
+    emit(optimisticState);
 
     try {
       // Network call to update limit on server and cache
       await _updateBudgetLimit(event.id, event.newLimit);
       await _cacheBudgets(optimistic);
-      emit(current.copyWith(isOffline: false));
+      emit(optimisticState.copyWith(isOffline: false));
     } catch (e) {
       // Rollback both cache and UI state
       await _cacheBudgets(previousBudgets);
